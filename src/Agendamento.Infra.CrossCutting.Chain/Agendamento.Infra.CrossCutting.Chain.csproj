@@ -1,0 +1,58 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Providers\HttpHandlers\DefaultStatus.cs\**" />
+    <Compile Remove="Providers\HttpHandlers\HttpResponseHandle.cs\**" />
+    <Compile Remove="Providers\HttpHandlers\StatusAccepted.cs\**" />
+    <Compile Remove="Providers\HttpHandlers\StatusBadRequest.cs\**" />
+    <Compile Remove="Providers\HttpHandlers\StatusConflict.cs\**" />
+    <Compile Remove="Providers\HttpHandlers\StatusCreated.cs\**" />
+    <Compile Remove="Providers\HttpHandlers\StatusForbidden.cs\**" />
+    <Compile Remove="Providers\HttpHandlers\StatusInternalServerError.cs\**" />
+    <Compile Remove="Providers\HttpHandlers\StatusNoContent.cs\**" />
+    <Compile Remove="Providers\HttpHandlers\StatusNotAuthorized.cs\**" />
+    <Compile Remove="Providers\HttpHandlers\StatusNotFound.cs\**" />
+    <Compile Remove="Providers\HttpHandlers\StatusOk.cs\**" />
+    <EmbeddedResource Remove="Providers\HttpHandlers\DefaultStatus.cs\**" />
+    <EmbeddedResource Remove="Providers\HttpHandlers\HttpResponseHandle.cs\**" />
+    <EmbeddedResource Remove="Providers\HttpHandlers\StatusAccepted.cs\**" />
+    <EmbeddedResource Remove="Providers\HttpHandlers\StatusBadRequest.cs\**" />
+    <EmbeddedResource Remove="Providers\HttpHandlers\StatusConflict.cs\**" />
+    <EmbeddedResource Remove="Providers\HttpHandlers\StatusCreated.cs\**" />
+    <EmbeddedResource Remove="Providers\HttpHandlers\StatusForbidden.cs\**" />
+    <EmbeddedResource Remove="Providers\HttpHandlers\StatusInternalServerError.cs\**" />
+    <EmbeddedResource Remove="Providers\HttpHandlers\StatusNoContent.cs\**" />
+    <EmbeddedResource Remove="Providers\HttpHandlers\StatusNotAuthorized.cs\**" />
+    <EmbeddedResource Remove="Providers\HttpHandlers\StatusNotFound.cs\**" />
+    <EmbeddedResource Remove="Providers\HttpHandlers\StatusOk.cs\**" />
+    <None Remove="Providers\HttpHandlers\DefaultStatus.cs\**" />
+    <None Remove="Providers\HttpHandlers\HttpResponseHandle.cs\**" />
+    <None Remove="Providers\HttpHandlers\StatusAccepted.cs\**" />
+    <None Remove="Providers\HttpHandlers\StatusBadRequest.cs\**" />
+    <None Remove="Providers\HttpHandlers\StatusConflict.cs\**" />
+    <None Remove="Providers\HttpHandlers\StatusCreated.cs\**" />
+    <None Remove="Providers\HttpHandlers\StatusForbidden.cs\**" />
+    <None Remove="Providers\HttpHandlers\StatusInternalServerError.cs\**" />
+    <None Remove="Providers\HttpHandlers\StatusNoContent.cs\**" />
+    <None Remove="Providers\HttpHandlers\StatusNotAuthorized.cs\**" />
+    <None Remove="Providers\HttpHandlers\StatusNotFound.cs\**" />
+    <None Remove="Providers\HttpHandlers\StatusOk.cs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.3.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Agendamento.Domain.Core\Agendamento.Domain.Core.csproj" />
+    <ProjectReference Include="..\Agendamento.Infra.CrossCutting.ExceptionHandler\Agendamento.Infra.CrossCutting.ExceptionHandler.csproj" />
+  </ItemGroup>
+
+</Project>

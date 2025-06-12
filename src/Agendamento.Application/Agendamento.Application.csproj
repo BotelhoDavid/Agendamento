@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Agendamento.Domain\Agendamento.Domain.csproj" />
+    <ProjectReference Include="..\Agendamento.Infra.CrossCutting.ExceptionHandler\Agendamento.Infra.CrossCutting.ExceptionHandler.csproj" />
+    <ProjectReference Include="..\Agendamento.Infrastructure\Agendamento.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

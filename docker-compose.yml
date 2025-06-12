@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  agendamento-api:
+    build:
+      context: ./src
+      dockerfile: Agendamento.Services.Api/Dockerfile
+    container_name: agendamento_api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DB_DATA_SOURCE=sqlserver
+      - DB_CATALOG=Agendamento
+      - DB_DATABASE_USER=SA
+      - DB_DATABASE_USER_PASSWORD=Your_password123
+      - JWT_SECRET=a075ffff4e1ef157e895072240d58f0ea99b83ecff66d9ff
+    ports:
+      - "777:8080"
+    networks:
+      - agendamento-network
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Your_password123
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+      - ./init-db:/init-db:ro
+    entrypoint: |
+        /bin/bash -c "
+        /opt/mssql/bin/sqlservr & 
+
+        echo 'Aguardando SQL Server iniciar...'
+
+        for i in {1..10}; do
+          /opt/mssql-tools18/bin/sqlcmd -S localhost -U SA -P 'Your_password123' -Q 'SELECT 1' > /dev/null 2>&1
+          if [ $? -eq 0 ]; then
+            echo 'SQL Server pronto para conexao.'
+            break
+          else
+            echo 'Tentativa $i: SQL Server ainda nao esta pronto...'
+            sleep 5
+          fi
+        done
+
+        echo 'Executando script init.sql...'
+
+        if /opt/mssql-tools18/bin/sqlcmd -S localhost -U SA -C -P 'Your_password123' -d master -i /init-db/init.sql; then
+          echo 'Script init.sql executado com sucesso.'
+        else
+          echo 'Erro ao executar o script init.sql.'
+          exit 1
+        fi
+
+        wait"
+    networks:
+      - agendamento-network
+
+volumes:
+  sql_data:
+
+networks:
+  agendamento-network:
+    driver: bridge

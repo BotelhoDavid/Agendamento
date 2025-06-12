@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Agendamento.Application\Agendamento.Application.csproj" />
+    <ProjectReference Include="..\Agendamento.Infra.CrossCutting.Chain\Agendamento.Infra.CrossCutting.Chain.csproj" />
+  </ItemGroup>
+
+</Project>
