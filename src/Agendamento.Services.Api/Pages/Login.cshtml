@@ -4,21 +4,35 @@
     ViewData["Title"] = "Login";
 }
 
-<h2>Login</h2>
-
-<form method="post">
-    <div>
-        <label asp-for="Input.Email">Email</label>
-        <input asp-for="Input.Email" />
-    </div>
-    <div>
-        <label asp-for="Input.Password">Senha</label>
-        <input asp-for="Input.Password" type="password" />
-    </div>
-    <button type="submit">Entrar</button>
-</form>
+<h1>Login</h1>
 
 @if (!string.IsNullOrEmpty(Model.ErrorMessage))
 {
-    <p style="color:red;">@Model.ErrorMessage</p>
+    <div id="loginError" style="color:red;">@Model.ErrorMessage</div>
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Input.Email"></label>
+                <input asp-for="Input.Email" class="form-control" />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Password"></label>
+                <input asp-for="Input.Password" type="password" class="form-control" />
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Entrar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

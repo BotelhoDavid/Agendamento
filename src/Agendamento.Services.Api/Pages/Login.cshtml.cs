@@ -1,49 +1,57 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Agendamento.Application.Interfaces;
+using Agendamento.Application.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.ComponentModel.DataAnnotations;
 
 namespace Agendamento.Services.Api.Pages
 {
     public class LoginModel : PageModel
     {
+        private readonly IAutenticacaoAppService _autenticacaoAppService;
+
+        public LoginModel(IAutenticacaoAppService autenticacaoAppService)
+        {
+            _autenticacaoAppService = autenticacaoAppService;
+        }
+
         [BindProperty]
-        public LoginInputModel Input { get; set; }
+        public AutenticacaoViewModel Input { get; set; }
 
         public string ErrorMessage { get; set; }
 
-        public void OnGet() { }
-
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
-            // Simulação de autenticação
-            if (Input.Email == "admin@admin.com" && Input.Password == "123456")
+            if (!ModelState.IsValid)
             {
-                // Exemplo: armazenar o token no cookie (fake token aqui)
-                var token = "fake-jwt-token";
+                return Page();
+            }
+
+            try
+            {
+                var token = await _autenticacaoAppService.AutenticarAsync(Input.Email, Input.Password);
+
+                if (string.IsNullOrEmpty(token))
+                {
+                    ModelState.AddModelError(string.Empty, "Email ou senha inválidos");
+                    return Page();
+                }
 
                 Response.Cookies.Append("access_token", token, new CookieOptions
                 {
                     HttpOnly = true,
                     Secure = true,
-                    SameSite = SameSiteMode.Strict
+                    SameSite = SameSiteMode.Strict,
+                    Path = "/",
+                    IsEssential = true
                 });
 
                 return RedirectToPage("/Index");
             }
-
-            ErrorMessage = "Email ou senha inválidos.";
-            return Page();
+            catch (Exception err)
+            {
+                ModelState.AddModelError(string.Empty, "Ocorreu um erro inesperado. Tente novamente mais tarde.");
+                return Page();
+            }
         }
-    }
-
-    public class LoginInputModel
-    {
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
-
-        [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
     }
 }
