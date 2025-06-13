@@ -49,7 +49,7 @@ docker-compose up --build
 
 - Front-end (Razor Pages): [http://localhost:777](http://localhost:777)
 - Login: [http://localhost:777/Login](http://localhost:777/Login)
-- Swagger (API): [http://localhost:777/swagger](http://localhost:777/swagger)
+- Swagger (API): [http://localhost:777/api/v1/agendamento/documentation/index.html](http://localhost:777/api/v1/agendamento/documentation/index.html)
 
 ---
 
@@ -72,7 +72,7 @@ A aplicação usa **JWT (JSON Web Tokens)** para proteger as rotas da API.
 User: sa
 Password: Your_password123
 Database: AgendamentoDb
-Login da Aplicação: admin@agendamento.com
+Login_da_Aplicacao: admin@agendamento.com
 Senha: senha123
 ```
 
