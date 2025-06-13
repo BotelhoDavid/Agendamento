@@ -11,6 +11,13 @@
             ItensPorPagina = QuantidadeItensPadrao;
         }
 
+        public FiltroPaginacaoBasicoViewModel(Guid pacienteId)
+        {
+            Id = pacienteId;
+            Pagina = PaginaPadrao;
+            ItensPorPagina = QuantidadeItensPadrao;
+        }
+
         public Guid? Id { get; set; }
         public int Pagina { get; set; }
         public int ItensPorPagina { get; set; }

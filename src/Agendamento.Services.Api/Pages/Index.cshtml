@@ -1,25 +1,57 @@
 ﻿@page
-@model Agendamento.Services.Api.Pages.IndexModel
+@model IndexModel
 @{
     ViewData["Title"] = "Página Inicial";
 }
 
 <h1>Bem-vindo ao sistema de Agendamento</h1>
 
-@* @if (User.Identity?.IsAuthenticated == true)
-{ *@
+@if (User.Identity?.IsAuthenticated == true)
+{
     <p>Olá, @User.Identity.Name!</p>
 
-    <form method="post" asp-page="/Logout">
+    <form method="post">
         <button type="submit">Sair</button>
     </form>
 
-    <p>
-        <a class="btn btn-primary" href="/CadastroPaciente">Cadastrar Paciente</a>
-    </p>
-@* }
+    <div class="text-center mt-4 d-flex justify-content-center gap-3">
+        <a asp-page="/Consultas/CadastrarConsulta" class="btn btn-primary">Cadastrar Consulta</a>
+        <a asp-page="/Pacientes/CadastrarPaciente" class="btn btn-primary">Cadastrar Paciente</a>
+    </div>
+}
 else
 {
-    <p>Você não está autenticado.</p>
-    <a href="/Login">Entrar</a>
-} *@
+    <p>você não está autenticado.</p>
+    <a href="/login">entrar</a>
+}
+
+@if (Model.Consultas != null && Model.Consultas.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Horário</th>
+                <th>Especialidade</th>
+                <th>Paciente</th>
+                <th>Médico</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var consulta in Model.Consultas)
+            {
+                <tr>
+                    <td>@consulta.Data.ToString("dd/MM/yyyy")</td>
+                    <td>@consulta.Horario.ToString(@"hh\:mm")</td>
+                    <td>@consulta.Especialidade</td>
+                    <td>@consulta.Paciente?.Nome</td>
+                    <td>@consulta.Medico?.Nome</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Nenhuma consulta encontrada.</p>
+}
