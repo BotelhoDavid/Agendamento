@@ -5,10 +5,7 @@ using Agendamento.Infra.CrossCutting.Dapper;
 using Agendamento.Infrastructure.Context;
 using Agendamento.Infrastructure.Dapper.Interfaces;
 using Dapper;
-using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
-using System.Collections;
-using System.Data.Common;
 
 namespace Agendamento.Infrastructure.Dapper
 {
@@ -20,10 +17,27 @@ namespace Agendamento.Infrastructure.Dapper
         {
         }
 
-        public async Task<bool> TestarConnectionsAsync()
+        #region Autenticacao
+
+        public async Task<UsuarioDTO> ObterUsuarioPorEmailAsync(string email)
         {
-            return await TestConnectionAsync();
+            string sql = @"
+                           SELECT 
+                                Usuario.Id, Usuario.Nome, Usuario.Email, Usuario.SenhaHash                       
+                            FROM Usuario
+                            WHERE Usuario.Email = @Email;";
+
+            var parametros = new
+            {
+                email
+            };
+
+            return await ExecuteFindAsync<UsuarioDTO>(sql, parametros);
         }
+
+        #endregion Autenticacao
+
+        #region Consulta
 
         public async Task<List<ConsultaDTO>> FiltrarConsultasAsync(Guid? id, DateTime? data, TimeSpan? horario, int pagina, int itensPorPagina)
         {
@@ -46,7 +60,7 @@ namespace Agendamento.Infrastructure.Dapper
                 whereClause.Add("CAST(Consulta.Data AS DATE) = @Data");
                 parametros.Add("@Data", data.Value);
             }
-            
+
             if (horario.HasValue)
             {
                 whereClause.Add("CAST(Consulta.Horario AS TIME) = @Horario");
@@ -75,8 +89,8 @@ namespace Agendamento.Infrastructure.Dapper
         public async Task CadastrarConsultaAsync(Consulta consulta)
         {
             string sql = @"
-            INSERT INTO Consulta (Id, MedicoId, PacienteId, Data, Especialidade)
-            VALUES (@Id, @MedicoId, @PacienteId, @Data, @Especialidade);";
+            INSERT INTO Consulta (Id, MedicoId, PacienteId, Data, Horario, Especialidade)
+            VALUES (@Id, @MedicoId, @PacienteId, @Data, @Horario, @Especialidade);";
 
             var parametros = new
             {
@@ -84,17 +98,52 @@ namespace Agendamento.Infrastructure.Dapper
                 consulta.MedicoId,
                 consulta.PacienteId,
                 consulta.Data,
+                consulta.Horario,
                 consulta.Especialidade
             };
 
             await ExecuteCreateAsync(sql, parametros);
         }
 
+        #endregion Consulta
+
+        #region Medico
+
+        public async Task<List<string>> ObterEspecialidadesAsync()
+        {
+            string sql = @"
+                           SELECT 
+                                Medico.Especialidade
+                           FROM Medico";
+
+            return (List<string>)await ExecuteQueryAsync<string>(sql, null);
+        }
+
+        public async Task<List<MedicoDTO>> ObterMedicoPorEspecialidadeAsync(string especialidade)
+        {
+            string sql = @"
+                           SELECT 
+                                Medico.Id, Medico.Nome, Medico.Especialidade, Medico.CRM
+                           FROM Medico
+                           WHERE Medico.Especialidade = @Especialidade";
+
+            var parametros = new
+            {
+                especialidade
+            };
+
+            return (List<MedicoDTO>)await ExecuteQueryAsync<MedicoDTO>(sql, parametros);
+        }
+
+        #endregion Medico
+
+        #region Paciente
+
         public async Task CadastrarPacienteAsync(Paciente paciente)
         {
             const string sql = @"
-        INSERT INTO Paciente (Id, Nome, CPF, DataNascimento, DataCadastro)
-        VALUES (@Id, @Nome, @CPF, @DataNascimento, @DataCadastro);";
+                               INSERT INTO Paciente (Id, Nome, CPF, DataNascimento, DataCadastro)
+                               VALUES (@Id, @Nome, @CPF, @DataNascimento, @DataCadastro);";
 
             var parametros = new
             {
@@ -107,5 +156,35 @@ namespace Agendamento.Infrastructure.Dapper
 
             await ExecuteCreateAsync(sql, parametros);
         }
+
+        public async Task<List<PacienteDTO>> ObterPacientesAsync()
+        {
+
+            string sql = @"
+                           SELECT 
+                                Paciente.Id, Paciente.Nome, Paciente.CPF, Paciente.DataNascimento
+                           FROM Paciente";
+
+            return (List<PacienteDTO>)await ExecuteQueryAsync<PacienteDTO>(sql, null);
+        }
+
+        public async Task<bool> ValidarCPF(string cpf)
+        {
+
+            string sql = @"
+                           SELECT 
+                                Paciente.Id, Paciente.Nome, Paciente.CPF, Paciente.DataNascimento
+                           FROM Paciente
+                           WHERE Paciente.CPF = @CPF";
+
+            var parametros = new
+            {
+                cpf
+            };
+
+            return await ExecuteFindAsync<PacienteDTO>(sql, null) != null;
+        }
+
+        #endregion Paciente
     }
 }

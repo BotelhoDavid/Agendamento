@@ -1,9 +1,8 @@
 using Agendamento.Domain.Core.Types;
 using Agendamento.Infra.CrossCutting.Dapper.Manager.Interface;
 using Dapper;
-using Microsoft.Extensions.Options;
-using System.Data;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Options;
 
 namespace Agendamento.Infra.CrossCutting.Dapper
 {
@@ -35,22 +34,12 @@ namespace Agendamento.Infra.CrossCutting.Dapper
             await dbConnect.ExecuteAsync(sql, parametros);
         }
 
-        public async Task<bool> TestConnectionAsync()
+        public async Task<TEntity> ExecuteFindAsync<TEntity>(string query, object parametro, SqlConnection dbConnect = null)
         {
-            try
-            {
-                var connection = dbConnectPrimaria;
-                await connection.OpenAsync();
+            if (dbConnect == null)
+                dbConnect = dbConnectPrimaria;
 
-                var result = await connection.ExecuteScalarAsync<int>("SELECT 1");
-
-                return result == 1;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Erro ao testar conexão: {ex.Message}");
-                return false;
-            }
+            return await dbConnect.QueryFirstOrDefaultAsync<TEntity>(query, parametro, commandTimeout: this.commandTimeOut);
         }
     }
 }
