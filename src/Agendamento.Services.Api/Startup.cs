@@ -1,10 +1,10 @@
 ﻿using Agendamento.Domain.Core.Settings;
 using Agendamento.Domain.Core.Types;
-using Agendamento.Infra.CrossCutting.Auth;
 using Agendamento.Infra.CrossCutting.IoC;
-using Agendamento.Services.Api.Configuration;
 using Agendamento.Infra.CrossCutting.Swagger.Providers;
-using Microsoft.Extensions.Hosting;
+using Agendamento.Services.Api.Configuration;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Collections;
 
 namespace Agendamento.Services.Api
 {
@@ -30,11 +30,23 @@ namespace Agendamento.Services.Api
 
             services.AddAutoMapperSetup();
 
-            services.AddRazorPages();
+            services.AddRazorPages(options =>
+            {
+                options.Conventions.AuthorizeFolder("/");
+                options.Conventions.AllowAnonymousToPage("/Login");
+                options.Conventions.AllowAnonymousToPage("/Logout");
+            });
 
             services.AddAuthorization();
 
-            services.AddAuthentication();
+            IDictionary _envVars = Environment.GetEnvironmentVariables();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddCustomJWTConfiguration(_configuration);
 
             NativeInjectorBootStrapper.RegisterServices(services);
         }
@@ -50,12 +62,10 @@ namespace Agendamento.Services.Api
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
 
-            app.UseJwtCookieAuthentication();
-
             app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
