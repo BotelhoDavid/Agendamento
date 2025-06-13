@@ -1,5 +1,6 @@
 using Agendamento.Application.Interfaces;
 using Agendamento.Application.ViewModels;
+using Agendamento.Domain.Core.DTO;
 using Agendamento.Domain.Core.Enum;
 using Agendamento.Domain.Entities;
 using Agendamento.Infra.CrossCutting.ExceptionHandler.Extensions;
@@ -20,17 +21,23 @@ namespace Agendamento.Application.Services
             _mapper = mapper;
         }
 
-        public async Task CadastrarPaciente(CadastroPacienteViewModel paciente)
+        public async Task CadastrarPacienteAsync(CadastroPacienteViewModel paciente)
         {
+            if (await _dapperAgendamento.ValidarCPF(paciente.CPF))
+                throw new ApiException(ApiErrorCodes.NOTFND);
+
             Paciente _paciente = _mapper.Map<Paciente>(paciente);
             await _dapperAgendamento.CadastrarPacienteAsync(_paciente);
         }
 
-        public IEnumerable<Paciente> ObterPacientes()
+        public async Task<List<PacienteViewModel>> ObterPacientesAsync()
         {
-            IEnumerable<Paciente> pacientes = new List<Paciente>() ?? throw new ApiException(ApiErrorCodes.USNOTFND);
+            List<PacienteDTO> _pacientes = await _dapperAgendamento.ObterPacientesAsync() ?? throw new ApiException(ApiErrorCodes.NOTFND);
 
-            return pacientes;
+            if (!_pacientes.Any())
+                return new List<PacienteViewModel>();
+
+            return _mapper.Map<List<PacienteViewModel>>(_pacientes);
         }
     }
 }
