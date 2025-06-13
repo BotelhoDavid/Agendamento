@@ -1,0 +1,61 @@
+﻿@page
+@model Agendamento.Services.Api.Pages.CadastrarPacienteModel
+@{
+    ViewData["Title"] = "Cadastrar Paciente";
+    Layout = "_Layout";
+}
+
+<h2>Cadastrar Paciente</h2>
+
+<form method="post" class="mt-3">
+    <div class="form-group">
+        <label asp-for="Paciente.Nome"></label>
+        <input asp-for="Paciente.Nome" class="form-control" />
+        <span asp-validation-for="Paciente.Nome" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Paciente.CPF"></label>
+        <input asp-for="Paciente.CPF" class="form-control" />
+        <span asp-validation-for="Paciente.CPF" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Paciente.DataNascimento"></label>
+        <!-- input tipo texto para flatpickr -->
+        <input asp-for="Paciente.DataNascimento" type="text" class="form-control" id="dataNascimento" autocomplete="off" />
+        <span asp-validation-for="Paciente.DataNascimento" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-2">
+        <i class="bi bi-save"></i> Salvar Paciente
+    </button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Calcula data mínima (100 anos atrás) e máxima (hoje)
+            const hoje = new Date();
+            const cemAnosAtras = new Date();
+            cemAnosAtras.setFullYear(hoje.getFullYear() - 100);
+
+            flatpickr("#dataNascimento", {
+                dateFormat: "d/m/Y",
+                maxDate: hoje,
+                minDate: cemAnosAtras,
+                locale: "pt",
+                allowInput: true,
+                defaultDate: null,
+                altInput: true,
+                altFormat: "d/m/Y"
+            });
+        });
+    </script>
+}

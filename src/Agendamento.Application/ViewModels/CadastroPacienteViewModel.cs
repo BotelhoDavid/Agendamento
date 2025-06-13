@@ -4,7 +4,7 @@ namespace Agendamento.Application.ViewModels
 {
     public class CadastroPacienteViewModel
     {
-        [Required(ErrorMessage = "O nome é obrigatório.")]
+        [Required(ErrorMessage = "O Nome é obrigatório.")]
         public string Nome { get; set; }
 
         [Required(ErrorMessage = "O CPF é obrigatório.")]
