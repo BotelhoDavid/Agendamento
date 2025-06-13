@@ -5,7 +5,6 @@ using Agendamento.Infra.CrossCutting.Chain.Providers.HttpHandlers;
 using Agendamento.Infrastructure.Context;
 using Agendamento.Infrastructure.Dapper;
 using Agendamento.Infrastructure.Dapper.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Agendamento.Infra.CrossCutting.IoC
@@ -31,8 +30,9 @@ namespace Agendamento.Infra.CrossCutting.IoC
             #region AppServices
 
             services.AddScoped<IConsultaAppService, ConsultaAppService>();
-            services.AddScoped<ILoginService, LoginService>();
+            services.AddScoped<IAutenticacaoAppService, AutenticacaoAppService>();
             services.AddScoped<IPacienteAppService, PacienteAppService>();
+            services.AddScoped<IMedicoAppService, MedicoAppService>();
 
             #endregion
 
