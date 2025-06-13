@@ -12,7 +12,6 @@ services:
       - DB_CATALOG=Agendamento
       - DB_DATABASE_USER=SA
       - DB_DATABASE_USER_PASSWORD=Your_password123
-      - JWT_SECRET=a075ffff4e1ef157e895072240d58f0ea99b83ecff66d9ff
     ports:
       - "777:8080"
     networks:
