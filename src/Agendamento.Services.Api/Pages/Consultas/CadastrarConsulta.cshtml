@@ -1,0 +1,214 @@
+﻿@page
+@model Agendamento.Services.Api.Pages.CadastrarConsultaModel
+@{
+    ViewData["Title"] = "Cadastrar Consulta";
+    Layout = "_Layout";
+}
+
+<h2>Cadastrar Consulta</h2>
+
+<form method="post" class="mt-3">
+    <div class="form-group">
+        <label asp-for="CadastroConsulta.PacienteId"></label>
+        <select asp-for="CadastroConsulta.PacienteId" class="form-control" id="paciente-select">
+            <option value="">Selecione um paciente</option>
+            @foreach (var paciente in Model.Pacientes)
+            {
+                <option value="@paciente.Value">@paciente.Text</option>
+            }
+        </select>
+        <span asp-validation-for="CadastroConsulta.PacienteId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CadastroConsulta.Especialidade"></label>
+        <select asp-for="CadastroConsulta.Especialidade" class="form-control" id="especialidade-select" disabled>
+            <option value="">Selecione uma especialidade</option>
+            @foreach (var esp in Model.Especialidades)
+            {
+                <option value="@esp.Value">@esp.Text</option>
+            }
+        </select>
+        <span asp-validation-for="CadastroConsulta.Especialidade" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CadastroConsulta.MedicoId"></label>
+        <select asp-for="CadastroConsulta.MedicoId" class="form-control" id="medico-select" disabled>
+            <option value="">Selecione um médico</option>
+        </select>
+        <span asp-validation-for="CadastroConsulta.MedicoId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CadastroConsulta.Data"></label>
+        <input asp-for="CadastroConsulta.Data" type="text" class="form-control" id="data-consulta" disabled />
+        <span asp-validation-for="CadastroConsulta.Data" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CadastroConsulta.Horario"></label>
+        <select asp-for="CadastroConsulta.Horario" class="form-control" id="horario-select" disabled>
+            <option value="">Selecione um horário</option>
+        </select>
+        <span asp-validation-for="CadastroConsulta.Horario" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-2">
+        <i class="bi bi-plus-circle"></i> Salvar Consulta
+    </button>
+</form>
+
+@section Scripts {
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const pacienteSelect = document.getElementById("paciente-select");
+            const especialidadeSelect = document.getElementById("especialidade-select");
+            const medicoSelect = document.getElementById("medico-select");
+            const dataInput = document.getElementById("data-consulta");
+            const horarioSelect = document.getElementById("horario-select");
+
+            const pageUrl = '@Url.Page("CadastrarConsulta")';
+
+            let flatpickrInstance;
+
+            function resetCampos() {
+                especialidadeSelect.value = "";
+                especialidadeSelect.disabled = true;
+
+                medicoSelect.value = "";
+                medicoSelect.disabled = true;
+                medicoSelect.innerHTML = '<option value="">Selecione um médico</option>';
+
+                if (flatpickrInstance) {
+                    flatpickrInstance.destroy();
+                    flatpickrInstance = null;
+                }
+                dataInput.value = "";
+                dataInput.disabled = true;
+
+                horarioSelect.value = "";
+                horarioSelect.disabled = true;
+                horarioSelect.innerHTML = '<option value="">Selecione um horário</option>';
+            }
+
+            pacienteSelect.addEventListener("change", function () {
+                resetCampos();
+                if (this.value) {
+                    especialidadeSelect.disabled = false;
+                }
+            });
+
+            especialidadeSelect.addEventListener("change", () => {
+                if (!especialidadeSelect.value) {
+                    medicoSelect.disabled = true;
+                    medicoSelect.innerHTML = '<option value="">Selecione um médico</option>';
+                    resetCampos();
+                    return;
+                }
+
+                fetch(`${pageUrl}?handler=MedicosPorEspecialidade&especialidade=${encodeURIComponent(especialidadeSelect.value)}`)
+                    .then(r => r.json())
+                    .then(data => {
+                        medicoSelect.innerHTML = '<option value="">Selecione um médico</option>';
+                        data.forEach(m => {
+                            medicoSelect.innerHTML += `<option value="${m.id}">${m.nome}</option>`;
+                        });
+                        medicoSelect.disabled = false;
+
+                        if (flatpickrInstance) {
+                            flatpickrInstance.destroy();
+                            flatpickrInstance = null;
+                        }
+                        dataInput.value = '';
+                        dataInput.disabled = true;
+
+                        horarioSelect.disabled = true;
+                        horarioSelect.innerHTML = '<option value="">Selecione um horário</option>';
+                    });
+            });
+
+            medicoSelect.addEventListener("change", () => {
+                if (!medicoSelect.value || !pacienteSelect.value) {
+                    if (flatpickrInstance) {
+                        flatpickrInstance.destroy();
+                        flatpickrInstance = null;
+                    }
+                    dataInput.value = '';
+                    dataInput.disabled = true;
+
+                    horarioSelect.disabled = true;
+                    horarioSelect.innerHTML = '<option value="">Selecione um horário</option>';
+                    return;
+                }
+
+                fetch(`${pageUrl}?handler=DatasDisponiveis&pacienteId=${pacienteSelect.value}`)
+                    .then(r => r.json())
+                    .then(data => {
+                        dataInput.disabled = false;
+
+                        if (flatpickrInstance) {
+                            flatpickrInstance.destroy();
+                            flatpickrInstance = null;
+                        }
+
+                        flatpickrInstance = flatpickr(dataInput, {
+                            dateFormat: "Y-m-d",    // valor real enviado no form
+                            altInput: true,
+                            altFormat: "d/m/Y",     // formato exibido para o usuário (dd/MM/yyyy)
+                            minDate: data.min,
+                            disable: data.datasIndisponiveis,
+                            onChange: function (selectedDates, dateStr) {
+                                dataInput.dispatchEvent(new Event('change'));
+                            }
+                        });
+
+                        dataInput.value = '';
+                        horarioSelect.disabled = true;
+                        horarioSelect.innerHTML = '<option value="">Selecione um horário</option>';
+                    })
+                    .catch(err => {
+                        console.error("Erro ao buscar datas disponíveis:", err);
+                        dataInput.disabled = true;
+                        dataInput.value = '';
+                        if (flatpickrInstance) {
+                            flatpickrInstance.destroy();
+                            flatpickrInstance = null;
+                        }
+
+                        horarioSelect.disabled = true;
+                        horarioSelect.innerHTML = '<option value="">Selecione um horário</option>';
+                    });
+            });
+
+            dataInput.addEventListener("change", () => {
+                const data = dataInput.value;
+                const medicoId = medicoSelect.value;
+
+                if (!data || !medicoId) {
+                    horarioSelect.disabled = true;
+                    horarioSelect.innerHTML = '<option value="">Selecione um horário</option>';
+                    return;
+                }
+
+                fetch(`${pageUrl}?handler=HorariosDisponiveis&medicoId=${medicoId}&data=${data}`)
+                    .then(r => r.json())
+                    .then(data => {
+                        horarioSelect.innerHTML = '<option value="">Selecione um horário</option>';
+                        data.forEach(h => {
+                            horarioSelect.innerHTML += `<option value="${h}">${h}</option>`;
+                        });
+                        horarioSelect.disabled = false;
+                    })
+                    .catch(err => {
+                        console.error("Erro ao buscar horários disponíveis:", err);
+                        horarioSelect.disabled = true;
+                        horarioSelect.innerHTML = '<option value="">Selecione um horário</option>';
+                    });
+            });
+        });
+    </script>
+}

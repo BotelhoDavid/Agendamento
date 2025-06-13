@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Agendamento.Domain.Core.DTO
 {
     public class ConsultaDTO
     {
-        [Column(TypeName = "date")] 
+        [Column(TypeName = "date")]
         public DateTime Data { get; set; }
 
-        [Column(TypeName = "time")] 
+        [Column(TypeName = "time")]
         public TimeSpan Horario { get; set; }
         public string Especialidade { get; set; } = default!;
 

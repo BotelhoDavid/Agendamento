@@ -6,11 +6,6 @@ using Agendamento.Domain.Entities;
 using Agendamento.Infra.CrossCutting.ExceptionHandler.Extensions;
 using Agendamento.Infrastructure.Dapper.Interfaces;
 using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Agendamento.Application.Services
 {
@@ -45,11 +40,6 @@ namespace Agendamento.Application.Services
         {
             Consulta _consulta = _mapper.Map<Consulta>(consulta);
             await _dapperAgendamento.CadastrarConsultaAsync(_consulta);
-        }
-
-        public async Task<bool> TestarBanco()
-        {
-            return await _dapperAgendamento.TestarConnectionsAsync();
         }
 
         private ConsultaViewModel ToViewModel(ConsultaDTO dto)

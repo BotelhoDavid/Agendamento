@@ -6,6 +6,5 @@ namespace Agendamento.Application.Interfaces
     {
         Task<List<ConsultaViewModel>> ObterConsultasPorIdAsync(FiltroPaginacaoBasicoViewModel filtro);
         Task CadastrarConsultaAsync(CadastroConsultaViewModel consulta);
-        Task<bool> TestarBanco();
     }
 }
