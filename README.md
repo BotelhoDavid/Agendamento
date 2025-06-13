@@ -72,6 +72,8 @@ A aplicação usa **JWT (JSON Web Tokens)** para proteger as rotas da API.
 User: sa
 Password: Your_password123
 Database: AgendamentoDb
+Login da Aplicação: admin@agendamento.com
+Senha: senha123
 ```
 
 ---
@@ -89,7 +91,7 @@ Database: AgendamentoDb
 ## 🧪 Endpoints
 
 Acesse a documentação Swagger:  
-[http://localhost:777/swagger](http://localhost:777/swagger)
+[http://localhost:777/api/v1/agendamento/documentation/index.html](http://localhost:777/api/v1/agendamento/documentation/index.html)
 
 ---
 
@@ -117,15 +119,6 @@ cd Agendamento.Services.Api
 dotnet run
 ```
 
----
-
-## ✅ To-do
-
-- [ ] Interface de administração de médicos.
-- [ ] Edição de pacientes/consultas.
-- [ ] Agendamento por especialidade.
-
----
 
 ## 📄 Licença
 
