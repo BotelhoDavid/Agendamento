@@ -33,6 +33,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Agendamento.Application\Agendamento.Application.csproj" />
     <ProjectReference Include="..\Agendamento.Infra.CrossCutting.Chain\Agendamento.Infra.CrossCutting.Chain.csproj" />
+    <ProjectReference Include="..\Agendamento.Infra.CrossCutting.ExceptionHandler\Agendamento.Infra.CrossCutting.ExceptionHandler.csproj" />
     <ProjectReference Include="..\Agendamento.Infra.CrossCutting.IoC\Agendamento.Infra.CrossCutting.IoC.csproj" />
     <ProjectReference Include="..\Agendamento.Infra.CrossCutting.Swagger\Agendamento.Infra.CrossCutting.Swagger.csproj" />
   </ItemGroup>

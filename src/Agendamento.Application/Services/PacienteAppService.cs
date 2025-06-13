@@ -24,7 +24,7 @@ namespace Agendamento.Application.Services
         public async Task CadastrarPacienteAsync(CadastroPacienteViewModel paciente)
         {
             if (await _dapperAgendamento.ValidarCPF(paciente.CPF))
-                throw new ApiException(ApiErrorCodes.NOTFND);
+                throw new ApiException(ApiErrorCodes.CPFEXIST);
 
             Paciente _paciente = _mapper.Map<Paciente>(paciente);
             await _dapperAgendamento.CadastrarPacienteAsync(_paciente);

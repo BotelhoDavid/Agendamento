@@ -1,0 +1,26 @@
+﻿@* Partial que mostra popups com erros de ModelState usando SweetAlert2 *@
+@if (!ViewData.ModelState.IsValid)
+{
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const mensagens = [];
+
+        @foreach (var modelState in ViewData.ModelState.Values)
+        {
+            foreach (var error in modelState.Errors)
+            {
+                <text>mensagens.push("@error.ErrorMessage");</text>
+            }
+        }
+
+            if (mensagens.length > 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro',
+                    html: mensagens.join('<br>'),
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+    </script>
+}

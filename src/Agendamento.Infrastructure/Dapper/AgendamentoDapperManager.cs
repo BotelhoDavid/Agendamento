@@ -182,7 +182,7 @@ namespace Agendamento.Infrastructure.Dapper
                 cpf
             };
 
-            return await ExecuteFindAsync<PacienteDTO>(sql, null) != null;
+            return await ExecuteFindAsync<PacienteDTO>(sql, parametros) != null;
         }
 
         #endregion Paciente

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 
 namespace Agendamento.Application.ViewModels
 {
@@ -8,7 +9,7 @@ namespace Agendamento.Application.ViewModels
         public string Nome { get; set; }
 
         [Required(ErrorMessage = "O CPF é obrigatório.")]
-        [RegularExpression(@"\d{11}", ErrorMessage = "CPF deve conter 11 dígitos numéricos.")]
+        [RegularExpression(@"^\d{3}\.\d{3}\.\d{3}-\d{2}$", ErrorMessage = "CPF deve conter 11 dígitos numéricos.")]
         public string CPF { get; set; }
 
         [Required(ErrorMessage = "A data de nascimento é obrigatória.")]

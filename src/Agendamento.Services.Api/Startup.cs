@@ -3,6 +3,7 @@ using Agendamento.Domain.Core.Types;
 using Agendamento.Infra.CrossCutting.IoC;
 using Agendamento.Infra.CrossCutting.Swagger.Providers;
 using Agendamento.Services.Api.Configuration;
+using Agendamento.Infra.CrossCutting.ExceptionHandler.Providers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Collections;
 
@@ -58,6 +59,7 @@ namespace Agendamento.Services.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseExceptionHandlerMiddleware();
             app.UseSwaggerConfiguration();
 
             app.UseHttpsRedirection();
