@@ -1,6 +1,6 @@
+using Agendamento.Domain.Core.Enum;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using Agendamento.Domain.Core.Enum;
 
 namespace Agendamento.Infra.CrossCutting.Chain.Providers.HttpHandlers
 {
