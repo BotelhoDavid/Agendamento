@@ -1,3 +1,5 @@
+using Agendamento.Application.ViewModels;
+using Agendamento.Domain.Entities;
 using AutoMapper;
 
 namespace Agendamento.Application.AutoMapper
@@ -6,7 +8,9 @@ namespace Agendamento.Application.AutoMapper
     {
         public ViewModelToDomainMappingProfile()
         {
-            //CreateMap<CondicaoComercialRespostaViewModel, CondicaoComercialResposta>();
+            CreateMap<CadastroConsultaViewModel, Consulta>();
+
+            CreateMap<CadastroPacienteViewModel, Paciente>();
         }
     }
 }

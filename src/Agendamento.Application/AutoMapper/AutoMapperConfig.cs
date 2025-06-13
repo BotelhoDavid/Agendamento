@@ -8,8 +8,6 @@ namespace Agendamento.Application.AutoMapper
         {
             return new MapperConfiguration(configuration =>
             {
-                configuration.AddProfile(new DomainToDtoMappingProfile());
-                configuration.AddProfile(new DomainToViewModelMappingProfile());
                 configuration.AddProfile(new DtoToViewModelMappingProfile());
                 configuration.AddProfile(new ViewModelToDomainMappingProfile());
             });
