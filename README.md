@@ -47,7 +47,7 @@ docker-compose up --build
 
 3. Acesse a aplicação:
 
-- Front-end (Razor Pages): [http://localhost:777](http://localhost:777)
+- Front-end (Razor Pages): [http://localhost:777/Login](http://localhost:777/Login)
 - Login: [http://localhost:777/Login](http://localhost:777/Login)
 - Swagger (API): [http://localhost:777/api/v1/agendamento/documentation/index.html](http://localhost:777/api/v1/agendamento/documentation/index.html)
 
